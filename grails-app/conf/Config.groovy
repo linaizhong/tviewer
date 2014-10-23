@@ -142,16 +142,22 @@ environments {
         //grails.host = "woodfired.ala.org.au"
         grails.serverURL = "http://${grails.host}:8082/${appName}"
         //distribution.image.cache = "http://${grails.host}/data/expert/images"
-        distribution.image.cache = "http://fish.ala.org.au/data/images"
-        results.cache.baseUrl = "http://${grails.host}:8081/expert/results"
-        distribution.search.baseUrl = "http://${grails.host}:8081/expert/search"
+        distribution.image.cache = "http://${grails.host}:8082/data/expert/images"
+        results.cache.baseUrl = "http://${grails.host}:8080/expert/results"
+        distribution.search.baseUrl = "http://${grails.host}:8082/expert/search"
     }
     test {
-        grails.host = "ala-testweb1.vm.csiro.au"
-        grails.serverURL = "http://${grails.host}:8080/${appName}"
+        grails.host = "130.56.248.132"
+        grails.serverURL = "http://${grails.host}/${appName}"
         distribution.image.cache = "http://${grails.host}/data/images"
-        results.cache.baseUrl = "http://${grails.host}:8080/expert/results"
-        distribution.search.baseUrl = "http://${grails.host}:8080/expert/search"
+        results.cache.baseUrl = "http://${grails.host}/expert/results"
+        distribution.search.baseUrl = "http://${grails.host}/expert/search"
+
+        //grails.host = "ala-testweb1.vm.csiro.au"
+        //grails.serverURL = "http://${grails.host}:8080/${appName}"
+        //distribution.image.cache = "http://${grails.host}/data/images"
+        //results.cache.baseUrl = "http://${grails.host}:8080/expert/results"
+        //distribution.search.baseUrl = "http://${grails.host}:8080/expert/search"
     }
 
 }
@@ -163,10 +169,10 @@ log4j = {
             production {
                 rollingFile name: "expert",
                     maxFileSize: 104857600,
-                    file: "/var/log/tomcat6/tviewer.log",
+                    file: "/var/log/tomcat7/tviewer.log",
                     threshold: org.apache.log4j.Level.WARN,
                     layout: pattern(conversionPattern: "%d [%c{1}]  %m%n")
-                rollingFile name: "stacktrace", maxFileSize: 1024, file: "/var/log/tomcat6/tviewer-stacktrace.log"
+                rollingFile name: "stacktrace", maxFileSize: 1024, file: "/var/log/tomcat7/tviewer-stacktrace.log"
             }
             development{
                 console name: "stdout", layout: pattern(conversionPattern: "%d [%c{1}]  %m%n"), threshold: org.apache.log4j.Level.DEBUG
