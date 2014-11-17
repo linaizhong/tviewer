@@ -6,6 +6,7 @@ grails.project.source.level = 1.6
 grails.project.war.file = "target/${appName}-${appVersion}.war"
 grails.project.groupId = "au.org.ala"
 
+grails.project.dependency.resolver = "maven" // or ivy
 grails.project.dependency.resolution = {
     // inherit Grails' default dependencies
     inherits("global") {
@@ -22,31 +23,30 @@ grails.project.dependency.resolution = {
         mavenLocal()
         mavenCentral()
 
-        // uncomment the below to enable remote dependency resolution
-        // from public Maven repositories
-        //mavenLocal()
-        //mavenCentral()
-        //mavenRepo "http://snapshots.repository.codehaus.org"
-        //mavenRepo "http://repository.codehaus.org"
-        //mavenRepo "http://download.java.net/maven/2/"
-        //mavenRepo "http://repository.jboss.com/maven2/"
+        mavenRepo "http://nexus.ala.org.au/content/groups/public/"
         mavenRepo "http://maven.ala.org.au/repository"
 
     }
     dependencies {
+        compile group: 'au.org.ala',
+            name: 'ala-cas-client',
+            version:'2.1-SNAPSHOT',
+            transitive:false
+        compile 'org.jasig.cas.client:cas-client-core:3.1.12'
     }
     plugins {
         //runtime ":jquery:1.8.0"
-        runtime ":resources:1.1.6"
-        runtime ":rest:0.7"
+        runtime ":resources:1.2.8"
+        runtime ":rest:0.8"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.4"
 
-        build ":tomcat:$grailsVersion"
+        build ":tomcat:7.0.54"
 
-        compile ':cache:1.0.1'
+        compile ':cache:1.1.1'
+        compile ":cache-ehcache:1.0.0"
     }
 }
