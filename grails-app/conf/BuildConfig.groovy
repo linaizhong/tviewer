@@ -25,7 +25,7 @@ grails.project.dependency.resolution = {
     }
     plugins {
         //runtime ":jquery:1.8.0"
-        runtime ":resources:1.1.6"
+        runtime ":resources:1.2.7"
         runtime ":rest:0.7"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities

@@ -1,6 +1,7 @@
 package au.org.ala.tviewer
 
 import grails.converters.JSON
+import net.sf.json.JSONArray
 
 class BieService {
 
@@ -63,8 +64,14 @@ class BieService {
         // look up the metadata
         def md = betterBulkLookup(guids)
 
+        //println "Metadata:"
+        //println md;
+
         // inject the metadata
         list.each { sp ->
+            //println "SP:"
+            //println sp
+
             def data = md[sp.guid]
             if (data) {
                 //sp.common = data.common  // don't override common name with name from bie as CMAR is more authoritative
@@ -82,17 +89,25 @@ class BieService {
     }
 
     def betterBulkLookup(list) {
-        def url = grailsApplication.config.bie.baseURL + "/species/guids/bulklookup.json"
+        def url = grailsApplication.config.bie.baseURL + "/ws/species/guids/bulklookup.json"
         def data = webService.doPost(url, "", (list as JSON).toString())
         Map results = [:]
+
+        println "Data:"
+        println data;
+
         data.resp.searchDTOList.each {item ->
-            results.put item.guid, [
-                   common: item.commonNameSingle,
-                   image: [largeImageUrl: item.largeImageUrl,
-                           smallImageUrl: item.smallImageUrl,
-                           thumbnailUrl: item.thumbnailUrl,
-                           imageMetadataUrl: item.imageMetadataUrl,
-                           imageSource: item.imageSource]]
+            //println "Item:"
+            //println item
+            if((item != null) && !item.equals(null) && (item.guid != null)) {
+                results.put item.guid, [
+                        common: item.commonNameSingle,
+                        image: [largeImageUrl: item.largeImageUrl,
+                                smallImageUrl: item.smallImageUrl,
+                                thumbnailUrl: item.thumbnailUrl,
+                                imageMetadataUrl: item.imageMetadataUrl,
+                                imageSource: item.imageSource]]
+            }
         }
         return results
     }

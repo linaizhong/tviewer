@@ -146,6 +146,11 @@ class TaxonController {
             // inject remaining metadata only for species to be displayed
             results = bieService.injectSpeciesMetadata(results)
 
+
+            //println "Results:"
+            //println results
+
+
             def model = [list: results, total: total, taxa: params.taxa, start: start, key: key,
                     queryDescription: data.queryDescription, pageSize: pageSize, sortBy: sortBy,
                     sortOrder: params.sortOrder, query: data.list.query, rank: 'species',

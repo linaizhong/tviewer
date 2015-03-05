@@ -48,20 +48,20 @@ if (!biocache.baseURL) {
     biocache.baseURL = "http://biocache.ala.org.au"
 }
 if (!spatial.baseURL) {
-    spatial.baseURL = "http://spatial.ala.org.au"
+    spatial.baseURL = "http://spatial-dev.ala.org.au"
 }
 if (!ala.baseURL) {
     ala.baseURL = "http://www.ala.org.au"
 }
 // spatial services
 if (!spatial.wms.url) {
-    spatial.wms.url = spatial.baseURL + "geoserver/ALA/wms?"
+    spatial.wms.url = spatial.baseURL + "/geoserver/ALA/wms?"
 }
 if (!spatial.wms.cache.url) {
-    spatial.wms.cache.url = spatial.baseURL + "geoserver/gwc/service/wms?"
+    spatial.wms.cache.url = spatial.baseURL + "/geoserver/gwc/service/wms?"
 }
 if (!spatial.layers.service.url) {
-    spatial.layers.service.url = spatial.baseURL + "layers-service"
+    spatial.layers.service.url = spatial.baseURL + "/layers-service"
 }
 if (!headerAndFooter.baseURL) {
     headerAndFooter.baseURL = "http://www2.ala.org.au/commonui"
@@ -102,6 +102,8 @@ grails.mime.types = [ html: ['text/html','application/xhtml+xml'],
                     ]
 
 // URL Mapping Cache Max Size, defaults to 5000
+grails.resources.adhoc.patterns = ['/images/*', '/data/images/*', '/css/*', '/js/*', '/plugins/*']
+
 //grails.urlmapping.cache.maxsize = 1000
 
 // The default codec used to encode data with ${}
@@ -138,13 +140,15 @@ environments {
         }
     }
     development {
-        grails.host = "localhost"
+        grails.host = "152.83.206.10"
         //grails.host = "woodfired.ala.org.au"
-        grails.serverURL = "http://${grails.host}:8082/${appName}"
+        //grails.serverURL = "http://${grails.host}:8082/${appName}"
+        grails.serverURL = "http://${grails.host}:8090/${appName}"
         //distribution.image.cache = "http://${grails.host}/data/expert/images"
-        distribution.image.cache = "http://${grails.host}:8082/data/expert/images"
+        //distribution.image.cache = "http://${grails.host}:8082/data/images"
+        distribution.image.cache = "http://${grails.host}:8090/tviewer/data/images"
         results.cache.baseUrl = "http://${grails.host}:8080/expert/results"
-        distribution.search.baseUrl = "http://${grails.host}:8082/expert/search"
+        distribution.search.baseUrl = "http://${grails.host}:8080/expert/search"
     }
     test {
         grails.host = "130.56.248.132"
@@ -153,26 +157,30 @@ environments {
         results.cache.baseUrl = "http://${grails.host}/expert/results"
         distribution.search.baseUrl = "http://${grails.host}/expert/search"
 
-        //grails.host = "ala-testweb1.vm.csiro.au"
-        //grails.serverURL = "http://${grails.host}:8080/${appName}"
-        //distribution.image.cache = "http://${grails.host}/data/images"
-        //results.cache.baseUrl = "http://${grails.host}:8080/expert/results"
-        //distribution.search.baseUrl = "http://${grails.host}:8080/expert/search"
+//        grails.host = "spatial-dev.ala.org.au"
+//        grails.serverURL = "http://${grails.host}/${appName}"
+//        distribution.image.cache = "http://${grails.host}/data/images"
+//        results.cache.baseUrl = "http://${grails.host}/expert/results"
+//        distribution.search.baseUrl = "http://${grails.host}/expert/search"
     }
 
 }
+
+def catalinaBase = System.properties.getProperty('catalina.base')
+if (!catalinaBase) catalinaBase = '.'   // just in case
+def logDirectory = "${catalinaBase}/logs"
 
 // log4j configuration
 log4j = {
     appenders {
         environments {
             production {
-                rollingFile name: "expert",
+                rollingFile name: "tviewer",
                     maxFileSize: 104857600,
-                    file: "/var/log/tomcat7/tviewer.log",
+                    file: "${logDirectory}/tviewer.log",
                     threshold: org.apache.log4j.Level.WARN,
                     layout: pattern(conversionPattern: "%d [%c{1}]  %m%n")
-                rollingFile name: "stacktrace", maxFileSize: 1024, file: "/var/log/tomcat7/tviewer-stacktrace.log"
+                rollingFile name: "stacktrace", maxFileSize: 1024, file: "${logDirectory}/tviewer-stacktrace.log"
             }
             development{
                 console name: "stdout", layout: pattern(conversionPattern: "%d [%c{1}]  %m%n"), threshold: org.apache.log4j.Level.DEBUG
@@ -181,7 +189,7 @@ log4j = {
     }
 
     root {
-        debug  'expert'
+        debug  'tviewer'
     }
 
     error  'org.codehaus.groovy.grails.web.servlet',  //  controllers
